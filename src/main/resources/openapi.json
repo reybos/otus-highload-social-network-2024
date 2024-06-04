@@ -622,7 +622,7 @@
       "LoginRequest": {
         "type": "object",
         "properties": {
-          "id": {
+          "user_id": {
             "$ref": "#/components/schemas/UserId"
           },
           "password": {
@@ -690,7 +690,7 @@
       "UserResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "user_id": {
             "$ref": "#/components/schemas/UserId"
           },
           "first_name": {
