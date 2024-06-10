@@ -9,4 +9,6 @@ public interface AuthorityService {
 
     List<Authority> findByRoles(List<Role> roles);
 
+    Authority create(String name);
+
 }

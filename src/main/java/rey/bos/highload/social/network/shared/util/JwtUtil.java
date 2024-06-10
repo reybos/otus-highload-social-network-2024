@@ -1,4 +1,4 @@
-package rey.bos.highload.social.network.util;
+package rey.bos.highload.social.network.shared.util;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

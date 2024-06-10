@@ -677,7 +677,10 @@
             "type": "string",
             "example": "Секретная строка"
           }
-        }
+        },
+        "required": [
+          "first_name", "password"
+        ]
       },
       "RegisterResponse": {
         "type": "object",

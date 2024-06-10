@@ -12,6 +12,7 @@ import rey.bos.highload.social.network.service.AuthorityService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,16 @@ public class AuthorityServiceImpl implements AuthorityService {
             ids.addAll(role.getAuthorities().stream().map(RoleAuthority::getAuthorityId).toList())
         );
         return !CollectionUtils.isEmpty(ids) ? Collections.emptyList() : authorityRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public Authority create(String name) {
+        Optional<Authority> authorityO = authorityRepository.findByName(name);
+        if (authorityO.isEmpty()) {
+            Authority authority = Authority.builder().name(name).build();
+            return authorityRepository.save(authority);
+        }
+        return authorityO.get();
     }
 
 }

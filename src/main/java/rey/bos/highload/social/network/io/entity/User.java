@@ -1,16 +1,19 @@
 package rey.bos.highload.social.network.io.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Table("users")
 @Data
+@Builder
 public class User {
 
     @Id
@@ -22,7 +25,7 @@ public class User {
 
     private String secondName;
 
-    private LocalDate birthDay;
+    private LocalDate birthdate;
 
     private String biography;
 
@@ -30,9 +33,13 @@ public class User {
 
     private String encryptedPassword;
 
-    private Collection<UserRole> roles = new HashSet<>();
+    @MappedCollection(idColumn = "user_id")
+    private Set<UserRole> roles;
 
-    private void addRole(Role role) {
+    public void addRole(Role role) {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
         roles.add(createUserRole(role));
     }
 

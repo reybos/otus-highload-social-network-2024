@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("users_roles")
+@Table("user_role")
 @Data
 @Builder
 public class UserRole {
@@ -14,5 +14,7 @@ public class UserRole {
     private Long id;
 
     private long roleId;
+
+    private long userId;
 
 }

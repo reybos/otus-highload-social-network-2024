@@ -7,21 +7,33 @@ import rey.bos.highload.social.network.api.UserApi;
 import rey.bos.highload.social.network.model.RegisterRequest;
 import rey.bos.highload.social.network.model.RegisterResponse;
 import rey.bos.highload.social.network.model.UserResponse;
+import rey.bos.highload.social.network.service.UserService;
+import rey.bos.highload.social.network.shared.mapper.UserMapper;
+import rey.bos.highload.social.network.shared.dto.UserDto;
 
 import java.util.List;
+
+import static rey.bos.highload.social.network.shared.Roles.ROLE_USER;
 
 @RequiredArgsConstructor
 @Controller
 public class UserController implements UserApi {
 
+    private final UserMapper userMapper;
+    private final UserService userService;
+
     @Override
-    public ResponseEntity<UserResponse> getUser(String id) {
-        return null;
+    public ResponseEntity<UserResponse> getUser(String userId) {
+        UserDto userDto = userService.findById(userId);
+        return ResponseEntity.ok(userMapper.mapResponse(userDto));
     }
 
     @Override
     public ResponseEntity<RegisterResponse> registerUser(RegisterRequest registerRequest) {
-        return null;
+        UserDto userDto = userMapper.map(registerRequest);
+        userDto.setRoles(List.of(ROLE_USER.name()));
+        userDto = userService.create(userDto);
+        return ResponseEntity.ok(new RegisterResponse().userId(userDto.getUserId()));
     }
 
     @Override

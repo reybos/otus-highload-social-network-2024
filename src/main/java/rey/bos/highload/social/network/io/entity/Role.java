@@ -1,15 +1,18 @@
 package rey.bos.highload.social.network.io.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.util.Assert;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Table(name = "roles")
 @Data
+@Builder
 public class Role {
 
     @Id
@@ -17,9 +20,13 @@ public class Role {
 
     private String name;
 
-    private Collection<RoleAuthority> authorities = new HashSet<>();
+    @MappedCollection(idColumn = "role_id")
+    private Set<RoleAuthority> authorities;
 
-    private void addAuthority(Authority authority) {
+    public void addAuthority(Authority authority) {
+        if (authorities == null) {
+            authorities = new HashSet<>();
+        }
         authorities.add(createRoleAuthority(authority));
     }
 
