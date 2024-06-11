@@ -14,7 +14,6 @@ public class UserDto {
 
     private String userId;
 
-    @NotBlank(message = "Username is mandatory")
     private String firstName;
 
     private String secondName;

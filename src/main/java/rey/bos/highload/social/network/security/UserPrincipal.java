@@ -1,7 +1,6 @@
 package rey.bos.highload.social.network.security;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +13,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class UserPrincipal implements UserDetails {
 
     @Getter(value=AccessLevel.PRIVATE)

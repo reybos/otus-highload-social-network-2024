@@ -1,6 +1,5 @@
 package rey.bos.highload.social.network.service.impl;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rey.bos.highload.social.network.exception.UserNotFoundException;
 import rey.bos.highload.social.network.io.entity.Authority;
 import rey.bos.highload.social.network.io.entity.Role;
 import rey.bos.highload.social.network.io.entity.User;
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(String userId) {
         Optional<User> userO = userRepository.findByUserId(userId);
         User user = userO.orElseThrow(
-            () -> new rey.bos.highload.social.network.exception.UserNotFoundException(userId)
+            () -> new UserNotFoundException(userId)
         );
         return userMapper.map(user);
     }

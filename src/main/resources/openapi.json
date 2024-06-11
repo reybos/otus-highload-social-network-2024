@@ -633,7 +633,6 @@
       },
       "LoginResponse": {
         "type": "object",
-        "x-class-extra-annotation": "@lombok.Builder",
         "properties": {
           "token": {
             "type": "string",
@@ -675,6 +674,7 @@
           },
           "password": {
             "type": "string",
+            "minLength": 8,
             "example": "Секретная строка"
           }
         },

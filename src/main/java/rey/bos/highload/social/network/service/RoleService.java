@@ -13,4 +13,6 @@ public interface RoleService {
 
     Role create(String name, Collection<Authority> authorities);
 
+    List<Role> findByUserId(String userId);
+
 }

@@ -27,7 +27,7 @@ public class LoginController implements LoginApi {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtil.generateJwtToken(authentication);
 
-        return ResponseEntity.ok(LoginResponse.builder().token(jwt).build());
+        return ResponseEntity.ok(new LoginResponse().token(jwt));
     }
 
 }

@@ -3,11 +3,13 @@ package rey.bos.highload.social.network.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import rey.bos.highload.social.network.exception.UserNotFoundException;
 import rey.bos.highload.social.network.io.entity.Authority;
 import rey.bos.highload.social.network.io.entity.Role;
 import rey.bos.highload.social.network.io.entity.User;
 import rey.bos.highload.social.network.io.entity.UserRole;
 import rey.bos.highload.social.network.io.repository.RoleRepository;
+import rey.bos.highload.social.network.io.repository.UserRepository;
 import rey.bos.highload.social.network.service.RoleService;
 
 import java.util.Collection;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Role> findByUser(User user) {
@@ -36,6 +39,15 @@ public class RoleServiceImpl implements RoleService {
             return roleRepository.save(role);
         }
         return roleO.get();
+    }
+
+    @Override
+    public List<Role> findByUserId(String userId) {
+        Optional<User> userO = userRepository.findByUserId(userId);
+        User user = userO.orElseThrow(
+            () -> new UserNotFoundException(userId)
+        );
+        return findByUser(user);
     }
 
 }

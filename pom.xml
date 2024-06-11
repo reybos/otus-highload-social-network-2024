@@ -188,6 +188,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -245,17 +251,8 @@
                                 <interfaceOnly>true</interfaceOnly>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <useJakartaEe>true</useJakartaEe>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
                             </configOptions>
-                            <typeMappings>
-                                <typeMapping>Double=BigDecimal</typeMapping>
-                                <typeMapping>DateTime=OffsetDateTime</typeMapping>
-                                <typeMapping>LocalDate=OffsetDateTime</typeMapping>
-                                <typeMapping>Date=OffsetDateTime</typeMapping>
-                            </typeMappings>
-                            <importMappings>
-                                <importMapping>OffsetDateTime=java.time.OffsetDateTime</importMapping>
-                                <importMapping>BigDecimal=java.math.BigDecimal</importMapping>
-                            </importMappings>
                         </configuration>
                     </execution>
                 </executions>
