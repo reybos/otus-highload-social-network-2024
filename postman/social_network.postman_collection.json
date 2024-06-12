@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "f9cae5b9-a479-407b-9ac4-1a5c0325b2e4",
+		"name": "social_network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "16886225"
+	},
+	"item": [
+		{
+			"name": "getUser",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsMHMyRUx5YXRPZzBFREtZcTBkMFlkRFRHQkJ1SVgiLCJpYXQiOjE3MTgxMTQ1MjAsImV4cCI6MTcxODk3ODUyMH0.4eICBJ7digJwjR4xZumPO9XD6lOkbb97CpcgWcEbh5eWkcOIAAJBXV3DzPMMOu0HWCGUq4U36NmKVx3zyKurLw"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Update(updateId = 943341609, message = null, inlineQuery = null, chosenInlineQuery = null, callbackQuery = null, editedMessage = null, channelPost = null, editedChannelPost = null, shippingQuery = null, preCheckoutQuery = null, poll = null, pollAnswer = null, myChatMember = ChatMemberUpdated(chat = Chat(id = 6777730646, type = private, title = null, firstName = Андрей, lastName = Босый, userName = reybos_work, photo = null, description = null, inviteLink = null, pinnedMessage = null, stickerSetName = null, canSetStickerSet = null, permissions = null, slowModeDelay = null, bio = null, linkedChatId = null, location = null, messageAutoDeleteTime = null, hasPrivateForwards = null, HasProtectedContent = null, joinToSendMessages = null, joinByRequest = null, hasRestrictedVoiceAndVideoMessages = null, isForum = null, activeUsernames = null, emojiStatusCustomEmojiId = null, hasAggressiveAntiSpamEnabled = null, hasHiddenMembers = null, emojiStatusExpirationDate = null, availableReactions = null, accentColorId = null, backgroundCustomEmojiId = null, profileAccentColorId = null, profileBackgroundCustomEmojiId = null, hasVisibleHistory = null, unrestrictBoostCount = null, customEmojiStickerSetName = null, birthdate = null, businessIntro = null, businessLocation = null, businessOpeningHours = null, personalChat = null), from = User(id = 6777730646, firstName = Андрей, isBot = false, lastName = Босый, userName = reybos_work, languageCode = ru, canJoinGroups = null, canReadAllGroupMessages = null, supportInlineQueries = null, isPremium = true, addedToAttachmentMenu = null, canConnectToBusiness = null), date = 1715519475, oldChatMember = ChatMemberBanned(status = kicked, user = User(id = 7054637336, firstName = test, isBot = true, lastName = null, userName = reybos_bot, languageCode = null, canJoinGroups = null, canReadAllGroupMessages = null, supportInlineQueries = null, isPremium = null, addedToAttachmentMenu = null, canConnectToBusiness = null), untilDate = 0), newChatMember = ChatMemberMember(status = member, user = User(id = 7054637336, firstName = test, isBot = true, lastName = null, userName = reybos_bot, languageCode = null, canJoinGroups = null, canReadAllGroupMessages = null, supportInlineQueries = null, isPremium = null, addedToAttachmentMenu = null, canConnectToBusiness = null)), inviteLink = null, viaChatFolderInviteLink = null), chatMember = null, chatJoinRequest = null, messageReaction = null, messageReactionCount = null, chatBoost = null, removedChatBoost = null, businessConnection = null, businessMessage = null, editedBuinessMessage = null, deletedBusinessMessages = null)",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/user/get/l0s2ELyatOg0EDKYq0d0YdDTGBBuIX"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"l0s2ELyatOg0EDKYq0d0YdDTGBBuIX\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/login"
+			},
+			"response": []
+		},
+		{
+			"name": "registerUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNzE0MjA3Mjk2fQ.9JN5C8HLG7YxpLo263GcDa8ymT5mBe2VGyX-Q48QYSRe6-iIUwMaBU9vt1gnoHWXN1uuMrniLJLvajTvK8Sisw",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"12345678\",\n    \"first_name\": \"Andrew\",\n    \"second_name\": \"Bosyi\",\n    \"birthdate\": \"2024-06-07\",\n    \"biography\": \"books\",\n    \"city\": \"Belgrade\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/user/register"
+			},
+			"response": []
+		}
+	]
+}
