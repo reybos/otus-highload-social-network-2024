@@ -1,5 +1,6 @@
 package rey.bos.highload.social.network.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,6 +19,7 @@ import rey.bos.highload.social.network.shared.util.JwtUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -64,11 +66,13 @@ class UserControllerTest extends TestClass {
     }
 
     @ParameterizedTest
-    @CsvSource({",12345678", "Andrew,"})
-    public void whenMissRequiredFieldsThenError(String firstName, String password) throws Exception {
+    @CsvSource({",Bosyi,12345678", "Andrew,Bosyi,", "Andrew,,12345678"})
+    public void whenMissRequiredFieldsThenError(
+        String firstName, String secondName, String password
+    ) throws Exception {
         RegisterRequest input = new RegisterRequest()
             .firstName(firstName)
-            .secondName("Bosyi")
+            .secondName(secondName)
             .birthdate(LocalDate.now(clock))
             .biography("Soccer")
             .city("Belgrade")
@@ -121,7 +125,6 @@ class UserControllerTest extends TestClass {
         assertThat(userResponse.getSecondName()).isEqualTo(user.getSecondName());
     }
 
-
     @Test
     public void whenGetUnknownUserThenError() throws Exception {
         UserDto user = userFactory.createUser();
@@ -130,6 +133,28 @@ class UserControllerTest extends TestClass {
         mockMvc.perform(get("/user/get/123")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isNotFound());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"an,bo", "And,syi", "Andrew,Bosyi"})
+    public void whenFindUserByNameThenSuccess(String firstName, String secondName) throws Exception {
+        UserDto user = userFactory.createUser(
+            UserFactory.UserParams.builder()
+                .firstName("Andrew")
+                .secondName("Bosyi")
+                .build()
+        );
+        String token = jwtUtil.generateJwtToken(user.getUserId());
+        MvcResult result = mockMvc.perform(get("/user/search")
+                .param("first_name", firstName)
+                .param("second_name", secondName)
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        List<UserResponse> userResponses = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+        assertThat(userResponses).hasSizeGreaterThan(0);
     }
 
 }

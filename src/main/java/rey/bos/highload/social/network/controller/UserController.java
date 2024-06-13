@@ -37,8 +37,9 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<UserResponse>> searchUser(String firstName, String lastName) {
-        return null;
+    public ResponseEntity<List<UserResponse>> searchUser(String firstName, String secondName) {
+        List<UserDto> users = userService.findByFirstAndSecondName(firstName, secondName);
+        return ResponseEntity.ok(userMapper.mapResponse(users));
     }
 
 }

@@ -14,6 +14,11 @@ CREATE TABLE IF NOT EXISTS users
     created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+--changeset reybos:users_set_not_null_second_name
+UPDATE users SET second_name = '' WHERE second_name IS NULL;
+ALTER TABLE users
+    ALTER COLUMN second_name SET NOT NULL;
+
 --changeset reybos:users_comments runOnChange:true
 COMMENT ON TABLE users IS 'List of all users';
 COMMENT ON COLUMN users.user_id IS 'User ID for external use';

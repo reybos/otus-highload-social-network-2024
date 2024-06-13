@@ -75,4 +75,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.map(user);
     }
 
+    @Override
+    public List<UserDto> findByFirstAndSecondName(String firstName, String secondName) {
+        List<User> users = userRepository.findByFirstAndSecondName(firstName, secondName);
+        return userMapper.map(users);
+    }
+
 }

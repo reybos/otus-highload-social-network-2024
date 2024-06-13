@@ -7,6 +7,8 @@ import rey.bos.highload.social.network.model.RegisterRequest;
 import rey.bos.highload.social.network.model.UserResponse;
 import rey.bos.highload.social.network.shared.dto.UserDto;
 
+import java.util.List;
+
 @Mapper(componentModel="spring")
 public interface UserMapper {
 
@@ -24,6 +26,10 @@ public interface UserMapper {
     @Mapping(target = "roles", ignore = true)
     UserDto map(User user);
 
+    List<UserDto> map(List<User> users);
+
     UserResponse mapResponse(UserDto userDto);
+
+    List<UserResponse> mapResponse(List<UserDto> users);
 
 }
