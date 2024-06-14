@@ -5,6 +5,6 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/target/*.jar /app/social-network.jar
+COPY --from=build /app/social-network-external/target/*.jar /app/social-network.jar
 ENTRYPOINT ["java", "-jar", "/app/social-network.jar"]
 EXPOSE 8080
