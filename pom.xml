@@ -18,9 +18,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>data-loader</module>
-        <module>social-network-external</module>
-        <module>social-network-core</module>
+        <module>sn-data-loader</module>
+        <module>sn-external</module>
+        <module>sn-core</module>
     </modules>
 
     <properties>
