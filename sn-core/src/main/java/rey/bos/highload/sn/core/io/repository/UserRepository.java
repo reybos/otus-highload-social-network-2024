@@ -20,8 +20,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
         """
         SELECT *
         FROM users
-        WHERE first_name ILIKE CONCAT('%', :firstName, '%')
-            AND second_name ILIKE CONCAT('%', :secondName, '%')
+        WHERE first_name ILIKE CONCAT(:firstName, '%')
+            AND second_name ILIKE CONCAT(:secondName, '%')
         ORDER BY user_id
         """
     )

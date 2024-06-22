@@ -136,7 +136,7 @@ class UserControllerTest extends TestClass {
     }
 
     @ParameterizedTest
-    @CsvSource({"an,bo", "And,syi", "Andrew,Bosyi"})
+    @CsvSource({"an,bo", "And,Bos", "Andrew,Bosyi"})
     public void whenFindUserByNameThenSuccess(String firstName, String secondName) throws Exception {
         UserDto user = userFactory.createUser(
             UserFactory.UserParams.builder()
