@@ -65,7 +65,7 @@ ORDER BY user_id;
 Для ускорения работы ручки предлагается сделать несколько вещей
 
 1. Нужен индекс по полям first_name и second_name. Так как поиск по префиксу, то будет работать B-Tree индекс, добавляем составной индекс на оба этих поля.
-2. Так как в запросе нет лимита, то стоит подумать над индексом для ускорения сортировки по user_id, так как выбираемых данных много. Индекс будет B-Tree, так как он хорошо работает при сортировке.
+2. Так как в запросе нет лимита, то стоит подумать над индексом для ускорения сортировки по user_id, так как выбираемых данных много. Индекс будет B-Tree, так как он хорошо работает при сортировке. Для обоснования этого индекса проведено тестирование с ним и без него при 50 rps
 
 <h2> Результаты после оптимизации </h2>
 
@@ -77,7 +77,7 @@ CREATE INDEX IF NOT EXISTS idx_user_id ON users (user_id);
 
 - План запроса с индексами
 <p>
-  <img src="media/explain_after.png"  height="300">
+  <img src="media/explain_after.png"  height="275">
 </p>
 
 <h3 align="center"> 10 rps </h3>
@@ -91,7 +91,7 @@ CREATE INDEX IF NOT EXISTS idx_user_id ON users (user_id);
   <img src="media/10_thr_idx.png"  height="400">
 </p>
 
-<h3 align="center"> 50 rps </h3>
+<h3 align="center"> 50 rps с idx_user_id </h3>
 
 <p align="center">
   <b>Latency</b><br>
@@ -100,6 +100,17 @@ CREATE INDEX IF NOT EXISTS idx_user_id ON users (user_id);
 <p align="center">
   <b>Throughput</b><br>
   <img src="media/50_thr_idx.png"  height="400">
+</p>
+
+<h3 align="center"> 50 rps без idx_user_id </h3>
+
+<p align="center">
+  <b>Latency</b><br>
+  <img src="media/50_lat_idx_without.png"  height="400">
+</p>
+<p align="center">
+  <b>Throughput</b><br>
+  <img src="media/50_thr_idx_without.png"  height="400">
 </p>
 
 <h3 align="center"> 100 rps </h3>
