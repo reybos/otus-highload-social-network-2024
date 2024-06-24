@@ -19,6 +19,12 @@ UPDATE users SET second_name = '' WHERE second_name IS NULL;
 ALTER TABLE users
     ALTER COLUMN second_name SET NOT NULL;
 
+--changeset reybos:users_idxs_for_search
+CREATE INDEX IF NOT EXISTS idx_first_name_second_name
+    ON users (first_name, second_name);
+CREATE INDEX IF NOT EXISTS idx_user_id
+    ON users (user_id);
+
 --changeset reybos:users_comments runOnChange:true
 COMMENT ON TABLE users IS 'List of all users';
 COMMENT ON COLUMN users.user_id IS 'User ID for external use';

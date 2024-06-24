@@ -8,7 +8,7 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
-        <intProp name="ThreadGroup.num_threads">100</intProp>
+        <intProp name="ThreadGroup.num_threads">50</intProp>
         <intProp name="ThreadGroup.ramp_time">10</intProp>
         <longProp name="ThreadGroup.duration">70</longProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -155,14 +155,14 @@
               <elementProp name="first_name" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">first_name</stringProp>
-                <stringProp name="Argument.value">${__RandomString(1,АБВГДЕЖЗИКЛМНОПРСТУШХФЭЯЧ,)}</stringProp>
+                <stringProp name="Argument.value">${__RandomString(2,АБВГДЕЖЗИКЛМНОПРСТУШХФЭЯЧ,)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
               <elementProp name="second_name" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">second_name</stringProp>
-                <stringProp name="Argument.value">${__RandomString(1,АБВГДЕЖЗИКЛМНОПРСТУШХФЭЯЧ,)}</stringProp>
+                <stringProp name="Argument.value">${__RandomString(2,АБВГДЕЖЗИКЛМНОПРСТУШХФЭЯЧ,)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
