@@ -25,6 +25,12 @@ CREATE INDEX IF NOT EXISTS idx_first_name_second_name
 CREATE INDEX IF NOT EXISTS idx_user_id
     ON users (user_id);
 
+--changeset reybos:users_change_idxs_for_search
+DROP INDEX IF EXISTS idx_first_name_second_name;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX IF NOT EXISTS idx_first_name_second_name
+    ON users USING gin (first_name gin_trgm_ops, second_name gin_trgm_ops);
+
 --changeset reybos:users_comments runOnChange:true
 COMMENT ON TABLE users IS 'List of all users';
 COMMENT ON COLUMN users.user_id IS 'User ID for external use';
