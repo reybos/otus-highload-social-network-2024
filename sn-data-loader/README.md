@@ -71,7 +71,9 @@ To speed up the endpoint, it is suggested to do several things
 
 - Request to build an index
 ```sql
-CREATE INDEX IF NOT EXISTS idx_first_name_second_name ON users (first_name, second_name);
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX IF NOT EXISTS idx_first_name_second_name
+    ON users USING gin (first_name gin_trgm_ops, second_name gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_user_id ON users (user_id);
 ```
 
