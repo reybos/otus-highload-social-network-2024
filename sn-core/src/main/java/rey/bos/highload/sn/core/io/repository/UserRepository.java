@@ -5,12 +5,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rey.bos.highload.sn.core.io.entity.User;
+import rey.bos.highload.sn.core.io.repository.custom.UserRepositoryCustom;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long>, UserRepositoryCustom {
 
     Optional<User> findByUserId(String userId);
 
@@ -25,6 +26,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
         ORDER BY user_id
         """
     )
-    List<User> findByFirstAndSecondName(@Param("firstName") String firstName, @Param("secondName") String secondName);
+    List<User> findByFirstAndSecondName(
+        @Param("firstName") String firstName, @Param("secondName") String secondName
+    );
 
 }

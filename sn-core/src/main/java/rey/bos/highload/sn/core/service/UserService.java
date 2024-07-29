@@ -9,7 +9,7 @@ public interface UserService extends UserDetailsService {
 
     UserDto create(UserDto userDto);
 
-    UserDto findById(String userId);
+    UserDto findByIdOrThrow(String userId);
 
     List<UserDto> findByFirstAndSecondName(String firstName, String secondName);
 
