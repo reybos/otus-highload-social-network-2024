@@ -24,7 +24,7 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<UserResponse> getUser(String userId) {
-        UserDto userDto = userService.findById(userId);
+        UserDto userDto = userService.findByIdOrThrow(userId);
         return ResponseEntity.ok(userDtoMapper.mapResponse(userDto));
     }
 

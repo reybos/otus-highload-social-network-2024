@@ -177,6 +177,7 @@
     },
     "/friend/set/{user_id}": {
       "put": {
+        "operationId": "setFriend",
         "security": [
           {
             "bearerAuth": []
@@ -192,6 +193,15 @@
             "in": "path"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FriendRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Пользователь успешно указал своего друга"
@@ -213,6 +223,7 @@
     },
     "/friend/delete/{user_id}": {
       "put": {
+        "operationId": "deleteFriend",
         "security": [
           {
             "bearerAuth": []
@@ -228,6 +239,15 @@
             "in": "path"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FriendRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Пользователь успешно удалил из друзей пользователя"
@@ -718,6 +738,14 @@
             "type": "string",
             "example": "Москва",
             "description": "Город"
+          }
+        }
+      },
+      "FriendRequest": {
+        "type": "object",
+        "properties": {
+          "friend_user_id": {
+            "$ref": "#/components/schemas/UserId"
           }
         }
       },

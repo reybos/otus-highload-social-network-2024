@@ -8,8 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import rey.bos.highload.sn.core.exception.UserNotFoundException;
-import rey.bos.highload.sn.core.util.Utils;
 import rey.bos.highload.sn.core.io.entity.Authority;
 import rey.bos.highload.sn.core.io.entity.Role;
 import rey.bos.highload.sn.core.io.entity.User;
@@ -21,6 +19,7 @@ import rey.bos.highload.sn.core.service.RoleService;
 import rey.bos.highload.sn.core.service.UserService;
 import rey.bos.highload.sn.core.shared.dto.UserDto;
 import rey.bos.highload.sn.core.shared.mapper.UserMapper;
+import rey.bos.highload.sn.core.util.Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,11 +66,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findById(String userId) {
-        Optional<User> userO = userRepository.findByUserId(userId);
-        User user = userO.orElseThrow(
-            () -> new UserNotFoundException(userId)
-        );
+    public UserDto findByIdOrThrow(String userId) {
+        User user = userRepository.findByUserIdOrThrow(userId);
         return userMapper.map(user);
     }
 
