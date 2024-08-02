@@ -7,6 +7,7 @@
   "paths": {
     "/login": {
       "post": {
+        "tags": ["Login"],
         "operationId": "login",
         "description": "Упрощенный процесс аутентификации путем передачи идентификатор пользователя и получения токена для дальнейшего прохождения авторизации",
         "requestBody": {
@@ -46,6 +47,7 @@
     },
     "/user/register": {
       "post": {
+        "tags": ["User"],
         "operationId": "registerUser",
         "description": "Регистрация нового пользователя",
         "requestBody": {
@@ -82,6 +84,7 @@
     },
     "/user/get/{id}": {
       "get": {
+        "tags": ["User"],
         "operationId": "getUser",
         "description": "Получение анкеты пользователя",
         "parameters": [
@@ -123,6 +126,7 @@
     },
     "/user/search": {
       "get": {
+        "tags": ["User"],
         "operationId": "searchUser",
         "description": "Поиск анкет",
         "parameters": [
@@ -177,6 +181,7 @@
     },
     "/friend/set/{user_id}": {
       "put": {
+        "tags": ["Friend"],
         "operationId": "setFriend",
         "security": [
           {
@@ -223,6 +228,7 @@
     },
     "/friend/delete/{user_id}": {
       "put": {
+        "tags": ["Friend"],
         "operationId": "deleteFriend",
         "security": [
           {
@@ -267,11 +273,23 @@
         }
       }
     },
-    "/post/create": {
+    "/user/{user_id}/post/create": {
       "post": {
+        "tags": ["Post"],
+        "operationId": "createPost",
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "schema": {
+              "$ref": "#/components/schemas/UserId"
+            },
+            "required": true,
+            "in": "path"
           }
         ],
         "requestBody": {
@@ -315,11 +333,31 @@
         }
       }
     },
-    "/post/update": {
+    "/user/{user_id}/post/{id}/update": {
       "put": {
+        "tags": ["Post"],
+        "operationId": "updatePost",
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "schema": {
+              "$ref": "#/components/schemas/UserId"
+            },
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "id",
+            "schema": {
+              "$ref": "#/components/schemas/PostId"
+            },
+            "required": true,
+            "in": "path"
           }
         ],
         "requestBody": {
@@ -327,11 +365,8 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["id","text"],
+                "required": ["text"],
                 "properties": {
-                  "id": {
-                    "$ref": "#/components/schemas/PostId"
-                  },
                   "text": {
                     "$ref": "#/components/schemas/PostText"
                   }
@@ -359,14 +394,24 @@
         }
       }
     },
-    "/post/delete/{id}": {
+    "/user/{user_id}/post/{id}/delete": {
       "put": {
+        "tags": ["Post"],
+        "operationId": "deletePost",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "parameters": [
+          {
+            "name": "user_id",
+            "schema": {
+              "$ref": "#/components/schemas/UserId"
+            },
+            "required": true,
+            "in": "path"
+          },
           {
             "name": "id",
             "schema": {
@@ -395,9 +440,19 @@
         }
       }
     },
-    "/post/get/{id}": {
+    "/user/{user_id}/post/{id}": {
       "get": {
+        "tags": ["Post"],
+        "operationId": "getPost",
         "parameters": [
+          {
+            "name": "user_id",
+            "schema": {
+              "$ref": "#/components/schemas/UserId"
+            },
+            "required": true,
+            "in": "path"
+          },
           {
             "name": "id",
             "schema": {
@@ -433,14 +488,24 @@
         }
       }
     },
-    "/post/feed": {
+    "/user/{user_id}/post/feed": {
       "get": {
+        "tags": ["Post"],
+        "operationId": "getPostFeed",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "parameters": [
+          {
+            "name": "user_id",
+            "schema": {
+              "$ref": "#/components/schemas/UserId"
+            },
+            "required": true,
+            "in": "path"
+          },
           {
             "name": "offset",
             "schema": {

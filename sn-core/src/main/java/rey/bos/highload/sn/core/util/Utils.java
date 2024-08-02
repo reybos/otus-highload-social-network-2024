@@ -2,6 +2,7 @@ package rey.bos.highload.sn.core.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import rey.bos.highload.sn.core.io.repository.PostRepository;
 import rey.bos.highload.sn.core.io.repository.UserRepository;
 
 import java.security.SecureRandom;
@@ -12,6 +13,7 @@ import java.util.Random;
 public class Utils {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -32,6 +34,14 @@ public class Utils {
         }
 
         return new String(returnValue);
+    }
+
+    public String generatePostId(int length) {
+        String postId;
+        do {
+            postId = generateRandomString(length);
+        } while (postRepository.existsByPostId(postId));
+        return postId;
     }
 
 }

@@ -8,18 +8,22 @@ import rey.bos.highload.sn.core.shared.dto.UserDto;
 import java.util.List;
 
 @Mapper(componentModel="spring")
-public interface UserMapper {
+public abstract class UserMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "userId", ignore = true)
-    @Mapping(target = "encryptedPassword", ignore = true)
-    @Mapping(target = "roles", ignore = true)
-    User map(UserDto userDto);
+    public User map(UserDto userDto) {
+        return User.builder()
+            .firstName(userDto.getFirstName())
+            .secondName(userDto.getSecondName())
+            .birthdate(userDto.getBirthdate())
+            .biography(userDto.getBiography())
+            .city(userDto.getCity())
+            .build();
+    }
 
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "roles", ignore = true)
-    UserDto map(User user);
+    public abstract UserDto map(User user);
 
-    List<UserDto> map(List<User> users);
+    public abstract List<UserDto> map(List<User> users);
 
 }

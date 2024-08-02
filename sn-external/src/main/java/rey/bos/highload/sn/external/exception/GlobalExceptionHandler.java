@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import rey.bos.highload.sn.core.exception.FriendNotFoundException;
+import rey.bos.highload.sn.core.exception.PostNotFoundException;
 import rey.bos.highload.sn.core.exception.UserNotFoundException;
 
 import java.util.HashMap;
@@ -26,8 +27,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({UserNotFoundException.class, FriendNotFoundException.class})
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(
+        {UserNotFoundException.class, FriendNotFoundException.class, PostNotFoundException.class}
+    )
+    public ResponseEntity<String> handleUserNotFoundException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

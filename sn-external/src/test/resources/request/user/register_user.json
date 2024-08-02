@@ -1,0 +1,8 @@
+{
+  "password": %s,
+  "first_name": %s,
+  "second_name": %s,
+  "birthdate": %s,
+  "biography": %s,
+  "city": %s
+}

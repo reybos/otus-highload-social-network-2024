@@ -151,6 +151,7 @@
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <useJakartaEe>true</useJakartaEe>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
+                                <useTags>true</useTags>
                             </configOptions>
                         </configuration>
                     </execution>

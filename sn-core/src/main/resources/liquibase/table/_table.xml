@@ -10,5 +10,6 @@
     <include file="role_authority.sql" relativeToChangelogFile="true"/>
     <include file="user_role.sql" relativeToChangelogFile="true"/>
     <include file="friend.sql" relativeToChangelogFile="true"/>
+    <include file="post.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
