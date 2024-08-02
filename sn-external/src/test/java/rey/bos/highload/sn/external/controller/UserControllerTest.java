@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import rey.bos.highload.sn.core.TestUtil;
 import rey.bos.highload.sn.core.factory.UserFactory;
 import rey.bos.highload.sn.core.shared.dto.UserDto;
 import rey.bos.highload.sn.core.util.JwtUtil;
 import rey.bos.highload.sn.external.TestClass;
-import rey.bos.highload.sn.external.model.RegisterRequest;
 import rey.bos.highload.sn.external.model.RegisterResponse;
 import rey.bos.highload.sn.external.model.UserResponse;
 
@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest extends TestClass {
@@ -44,19 +45,19 @@ class UserControllerTest extends TestClass {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private TestUtil testUtil;
+
     @Test
     public void whenCreateThenSuccess() throws Exception {
-        RegisterRequest input = new RegisterRequest()
-            .firstName("Andrew")
-            .secondName("Bosyi")
-            .birthdate(LocalDate.now(clock))
-            .biography("Soccer")
-            .city("Belgrade")
-            .password("12345678");
+        String request = testUtil.readJson(
+            "request/user/register_user.json", "12345678", "Andrew", "Bosyi", LocalDate.now(clock),
+            "Soccer", null
+        );
 
         MvcResult result = mockMvc.perform(post("/user/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(input)))
+            .content(request))
             .andExpect(status().isOk())
             .andReturn();
 
@@ -70,29 +71,26 @@ class UserControllerTest extends TestClass {
     public void whenMissRequiredFieldsThenError(
         String firstName, String secondName, String password
     ) throws Exception {
-        RegisterRequest input = new RegisterRequest()
-            .firstName(firstName)
-            .secondName(secondName)
-            .birthdate(LocalDate.now(clock))
-            .biography("Soccer")
-            .city("Belgrade")
-            .password(password);
+        String request = testUtil.readJson(
+            "request/user/register_user.json", password, firstName, secondName, LocalDate.now(clock),
+            "Soccer", "Belgrade"
+        );
 
         mockMvc.perform(post("/user/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(input)))
+            .content(request))
             .andExpect(status().isBadRequest());
     }
 
     @Test
     public void whenShortPasswordThenError() throws Exception {
-        RegisterRequest input = new RegisterRequest()
-            .firstName("Andrew")
-            .password("1");
+        String request = testUtil.readJson(
+            "request/user/register_user.json", "1", "Andrew", null, null, null, null
+        );
 
         mockMvc.perform(post("/user/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(input)))
+                .content(request))
             .andExpect(status().isBadRequest());
     }
 
@@ -108,21 +106,15 @@ class UserControllerTest extends TestClass {
     public void whenGetUserThenSuccess() throws Exception {
         UserDto user = userFactory.createUser();
         String token = jwtUtil.generateJwtToken(user.getUserId());
+        String expected = testUtil.readJson(
+            "response/user/get_user.json", user.getUserId(), user.getFirstName(), user.getSecondName(),
+            user.getBirthdate(), user.getBiography(), user.getCity()
+        );
 
-        MvcResult result = mockMvc.perform(get("/user/get/" + user.getUserId())
+        mockMvc.perform(get("/user/get/" + user.getUserId())
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
-            .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        UserResponse userResponse = objectMapper.readValue(jsonResponse, UserResponse.class);
-
-        assertThat(userResponse.getUserId()).isEqualTo(user.getUserId());
-        assertThat(userResponse.getBiography()).isEqualTo(user.getBiography());
-        assertThat(userResponse.getBirthdate()).isEqualTo(user.getBirthdate());
-        assertThat(userResponse.getCity()).isEqualTo(user.getCity());
-        assertThat(userResponse.getFirstName()).isEqualTo(user.getFirstName());
-        assertThat(userResponse.getSecondName()).isEqualTo(user.getSecondName());
+            .andExpect(content().json(expected));
     }
 
     @Test
