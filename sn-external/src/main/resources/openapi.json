@@ -509,7 +509,8 @@
           {
             "name": "offset",
             "schema": {
-              "type": "number",
+              "type": "integer",
+              "format": "int32",
               "minimum": 0,
               "description": "Оффсет с которого начинать выдачу",
               "example": 100,
@@ -521,7 +522,8 @@
           {
             "name": "limit",
             "schema": {
-              "type": "number",
+              "type": "integer",
+              "format": "int32",
               "minimum": 1,
               "description": "Лимит, ограничивающий кол-во возвращенных сущностей",
               "example": 10,

@@ -6,6 +6,8 @@ import rey.bos.highload.sn.core.shared.dto.PostDto;
 import rey.bos.highload.sn.external.model.CreatePostRequest;
 import rey.bos.highload.sn.external.model.Post;
 
+import java.util.List;
+
 @Mapper(componentModel="spring")
 public abstract class PostDtoMapper {
 
@@ -16,5 +18,7 @@ public abstract class PostDtoMapper {
     @Mapping(target = "id", source = "postId")
     @Mapping(target = "text", source = "content")
     public abstract Post map(PostDto post);
+
+    public abstract List<Post> map(List<PostDto> postDtos);
 
 }

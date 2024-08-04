@@ -11,7 +11,6 @@ import rey.bos.highload.sn.external.model.CreatePostRequest;
 import rey.bos.highload.sn.external.model.Post;
 import rey.bos.highload.sn.external.shared.mapper.PostDtoMapper;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -48,8 +47,9 @@ public class PostController implements PostApi {
     }
 
     @Override
-    public ResponseEntity<List<Post>> getPostFeed(String userId, BigDecimal offset, BigDecimal limit) {
-        return null;
+    public ResponseEntity<List<Post>> getPostFeed(String userId, Integer offset, Integer limit) {
+        List<PostDto> postDtos = postService.getPostFeed(userId, offset, limit);
+        return  ResponseEntity.ok(postDtoMapper.map(postDtos));
     }
 
 }

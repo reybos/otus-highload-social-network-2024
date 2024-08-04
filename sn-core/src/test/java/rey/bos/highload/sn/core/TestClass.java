@@ -6,12 +6,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
-import rey.bos.highload.sn.core.config.CoreConfig;
 import rey.bos.highload.sn.core.config.BaeldungPostgresqlContainer;
+import rey.bos.highload.sn.core.config.CoreConfig;
 import rey.bos.highload.sn.core.config.TestCoreConfig;
 
 @SpringBootTest(classes = {CoreConfig.class})
-@ContextConfiguration(classes = TestCoreConfig.class)
+@ContextConfiguration(classes = {TestCoreConfig.class})
 @AutoConfigureMockMvc
 @ActiveProfiles({"tc", "tc-auto", "test"})
 public class TestClass {
