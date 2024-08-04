@@ -10,6 +10,8 @@ import rey.bos.highload.sn.core.io.entity.Post;
 import rey.bos.highload.sn.core.io.entity.User;
 import rey.bos.highload.sn.core.io.repository.PostRepository;
 import rey.bos.highload.sn.core.io.repository.UserRepository;
+import rey.bos.highload.sn.core.io.repository.model.PostFeed;
+import rey.bos.highload.sn.core.service.PostCacheService;
 import rey.bos.highload.sn.core.service.PostService;
 import rey.bos.highload.sn.core.shared.dto.PostDto;
 import rey.bos.highload.sn.core.shared.mapper.PostMapper;
@@ -17,6 +19,7 @@ import rey.bos.highload.sn.core.util.Utils;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,9 +31,16 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final Utils utils;
     private final Clock clock;
+    private final PostCacheService postCacheService;
 
     @Value("${post.id.length}")
     private int postIdLength;
+
+    @Value("${post.offset}")
+    private int postOffsetDefault;
+
+    @Value("${post.limit}")
+    private int postLimitDefault;
 
     @Override
     @Retryable(retryFor = DataIntegrityViolationException.class)
@@ -68,6 +78,25 @@ public class PostServiceImpl implements PostService {
         Post post = getPostOrThrow(userId, postId);
         post.setContent(postDto.getContent());
         postRepository.save(post);
+    }
+
+    @Override
+    public List<PostDto> getPostFeed(String userId, Integer offsetI, Integer limitI) {
+        int offset = offsetI == null ? postOffsetDefault : offsetI;
+        int limit = limitI == null ? postLimitDefault : limitI;
+        List<PostFeed> cachedPosts = postCacheService.getPosts(userId, offset, limit);
+        int cacheSize = postCacheService.getCacheSize(userId);
+        int cashSizeDefault = postCacheService.getPostCashSizeDefault();
+
+        if (cachedPosts.size() < limit && (cacheSize == 0 || cacheSize == cashSizeDefault)) {
+            int remaining = limit - cachedPosts.size();
+            List<PostFeed> dbPosts = postRepository.findLatestPostsByUserId(
+                userId, offset + cachedPosts.size(), remaining
+            );
+            cachedPosts.addAll(dbPosts);
+        }
+
+        return postMapper.map(cachedPosts);
     }
 
     private Post getPostOrThrow(String userId, String postId) {

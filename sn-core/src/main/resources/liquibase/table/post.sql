@@ -12,6 +12,10 @@ CREATE TABLE IF NOT EXISTS post
     created_at TIMESTAMPTZ NOT NULL
 );
 
+--changeset reybos:create_indexes
+CREATE INDEX IF NOT EXISTS post_created_at_idx ON post (created_at);
+CREATE INDEX IF NOT EXISTS post_user_id_idx ON post (user_id);
+
 --changeset reybos:post_comments runOnChange:true
 COMMENT ON TABLE post IS 'List of users friends';
 COMMENT ON COLUMN post.post_id IS 'The external ID of the post';
