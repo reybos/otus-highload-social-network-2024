@@ -38,8 +38,11 @@ public class PostCacheServiceImpl implements PostCacheService {
     public List<PostFeed> getPosts(String userId, int offset, int limit) {
         String key = CACHE_PREFIX + userId;
         int cacheSize = getCacheSize(userId);
-        if (offset + limit > cacheSize) {
+        if (offset >= cacheSize || cacheSize == 0) {
             return new ArrayList<>();
+        }
+        if (offset + limit > cacheSize && cacheSize != getPostCashSizeDefault()) {
+            limit = cacheSize;
         }
         List<Object> postList = redisTemplate.opsForList().range(key, offset, offset + limit - 1);
         if (postList == null) {

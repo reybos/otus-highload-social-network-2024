@@ -11,11 +11,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public LettuceConnectionFactory redisConnectionFactory(
-        RedisProperties redisProperties) {
+    public LettuceConnectionFactory redisConnectionFactory(RedisProperties redisProperties) {
         return new LettuceConnectionFactory(
             redisProperties.getRedisHost(),
-            redisProperties.getRedisPort());
+            redisProperties.getRedisPort()
+        );
     }
 
     @Bean
