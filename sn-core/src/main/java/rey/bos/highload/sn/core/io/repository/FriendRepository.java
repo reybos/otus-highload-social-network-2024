@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import rey.bos.highload.sn.core.io.entity.Friend;
 import rey.bos.highload.sn.core.io.repository.custom.FriendRepositoryCustom;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -35,5 +36,16 @@ public interface FriendRepository extends CrudRepository<Friend, Long>, FriendRe
         """
     )
     Optional<Friend> findFriend(@Param("userId") String userId, @Param("friendUserId") String friendUserId);
+
+    @Query(
+        """
+        SELECT u.user_id
+        FROM friend f
+                LEFT JOIN users u ON u.id = f.user_id
+        WHERE f.friend_id = (SELECT id FROM users WHERE user_id = :userId)
+            AND NOT f.deleted
+        """
+    )
+    List<String> findSubscriber(@Param("userId") String userId);
 
 }

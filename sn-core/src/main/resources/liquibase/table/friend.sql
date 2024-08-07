@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS friend
 CREATE UNIQUE INDEX user_id_friend_id_not_deleted_idx
     ON friend (user_id, friend_id, deleted) WHERE NOT deleted;
 
+--changeset reybos:create_friend_id_idx
+CREATE INDEX IF NOT EXISTS friend_id_idx ON friend (friend_id);
+
 --changeset reybos:friend_comments runOnChange:true
 COMMENT ON TABLE friend IS 'List of users friends';
 COMMENT ON COLUMN friend.user_id IS 'The ID of the current user';

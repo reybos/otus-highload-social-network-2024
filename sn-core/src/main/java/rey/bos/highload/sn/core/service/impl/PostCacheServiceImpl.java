@@ -9,7 +9,6 @@ import rey.bos.highload.sn.core.service.PostCacheService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +16,7 @@ public class PostCacheServiceImpl implements PostCacheService {
 
     private static final String CACHE_PREFIX = "user_posts:";
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, PostFeed> redisTemplate;
 
     @Value("${post.cash.size}")
     private int postCashSizeDefault;
@@ -44,11 +43,8 @@ public class PostCacheServiceImpl implements PostCacheService {
         if (offset + limit > cacheSize && cacheSize != getPostCashSizeDefault()) {
             limit = cacheSize;
         }
-        List<Object> postList = redisTemplate.opsForList().range(key, offset, offset + limit - 1);
-        if (postList == null) {
-            return new ArrayList<>();
-        }
-        return postList.stream().map(post -> (PostFeed) post).collect(Collectors.toList());
+        List<PostFeed> postList = redisTemplate.opsForList().range(key, offset, offset + limit - 1);
+        return postList == null ? new ArrayList<>() : postList;
     }
 
     @Override
