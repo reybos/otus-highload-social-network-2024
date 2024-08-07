@@ -1,6 +1,7 @@
 package rey.bos.highload.sn.core.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.retry.annotation.Retryable;
@@ -32,6 +33,7 @@ public class PostServiceImpl implements PostService {
     private final Utils utils;
     private final Clock clock;
     private final PostCacheService postCacheService;
+    private final RabbitTemplate rabbitTemplate;
 
     @Value("${post.id.length}")
     private int postIdLength;
@@ -53,6 +55,7 @@ public class PostServiceImpl implements PostService {
         post.setCreatedAt(Instant.now(clock));
         post.setUpdatedAt(Instant.now(clock));
         Post storedPost = postRepository.save(post);
+        rabbitTemplate.convertAndSend("changePostQueue", user.getUserId());
         return postMapper.map(storedPost, userId);
     }
 
@@ -65,6 +68,7 @@ public class PostServiceImpl implements PostService {
         Post post = postO.get();
         post.setDeleted(true);
         postRepository.save(post);
+        rabbitTemplate.convertAndSend("changePostQueue", userId);
     }
 
     @Override
@@ -78,6 +82,7 @@ public class PostServiceImpl implements PostService {
         Post post = getPostOrThrow(userId, postId);
         post.setContent(postDto.getContent());
         postRepository.save(post);
+        rabbitTemplate.convertAndSend("changePostQueue", userId);
     }
 
     @Override
@@ -95,7 +100,6 @@ public class PostServiceImpl implements PostService {
             );
             cachedPosts.addAll(dbPosts);
         }
-
         return postMapper.map(cachedPosts);
     }
 

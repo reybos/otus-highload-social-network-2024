@@ -79,4 +79,6 @@ class PostServiceTest extends TestClass {
         assertThat(posts.get(0)).isEqualTo(postDto);
     }
 
+    //TODO check cache work 
+
 }

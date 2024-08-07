@@ -1,6 +1,7 @@
 package rey.bos.highload.sn.core.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import rey.bos.highload.sn.core.exception.FriendNotFoundException;
 import rey.bos.highload.sn.core.io.entity.Friend;
@@ -18,6 +19,7 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final FriendMapper friendMapper;
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public void setFriend(String userId, FriendDto friendDto) {
@@ -25,6 +27,7 @@ public class FriendServiceImpl implements FriendService {
         User friendUser = userRepository.findByUserIdOrThrow(friendDto.getFriendUserId());
         Friend friend = Friend.builder().userId(currUser.getId()).friendId(friendUser.getId()).deleted(false).build();
         friendRepository.save(friend);
+        rabbitTemplate.convertAndSend("changeFriendQueue", userId);
     }
 
     @Override
@@ -34,6 +37,7 @@ public class FriendServiceImpl implements FriendService {
         Friend friend = friendRepository.findFriendOrThrow(currUser.getId(), friendUser.getId());
         friend.setDeleted(true);
         friendRepository.save(friend);
+        rabbitTemplate.convertAndSend("changeFriendQueue", userId);
     }
 
     @Override

@@ -6,9 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import rey.bos.highload.sn.core.TestUtil;
 import rey.bos.highload.sn.core.exception.PostNotFoundException;
+import rey.bos.highload.sn.core.factory.FriendFactory;
 import rey.bos.highload.sn.core.factory.PostFactory;
 import rey.bos.highload.sn.core.factory.UserFactory;
 import rey.bos.highload.sn.core.service.PostService;
+import rey.bos.highload.sn.core.shared.dto.FriendDto;
 import rey.bos.highload.sn.core.shared.dto.PostDto;
 import rey.bos.highload.sn.core.shared.dto.UserDto;
 import rey.bos.highload.sn.core.util.JwtUtil;
@@ -38,6 +40,9 @@ class PostControllerTest extends TestClass {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private FriendFactory friendFactory;
 
     @Test
     public void whenCreatePostThenSuccess() throws Exception {
@@ -92,6 +97,23 @@ class PostControllerTest extends TestClass {
             .andExpect(status().isOk());
         PostDto storedPost = postService.getPost(postDto.getAuthorUserId(), postDto.getPostId());
         assertThat(storedPost.getContent()).isEqualTo(newContent);
+    }
+
+    @Test
+    public void whenGetFeedPostThenSuccess() throws Exception {
+        UserDto userDto = userFactory.createUser();
+        FriendDto friendDto = friendFactory.addFriend(userDto.getUserId());
+        PostDto postDto = postFactory.createPost(
+            PostFactory.PostParams.builder().userId(friendDto.getFriendUserId()).build()
+        );
+        String token = jwtUtil.generateJwtToken(userDto.getUserId());
+        String expected = testUtil.readJson(
+            "response/post/get_feed.json", postDto.getPostId(), postDto.getContent(), postDto.getAuthorUserId()
+        );
+        mockMvc.perform(get(String.format("/user/%s/post/feed", userDto.getUserId()))
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andExpect(content().json(expected));
     }
 
 }
