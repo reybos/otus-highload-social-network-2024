@@ -86,9 +86,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostFeed(String userId, Integer offsetI, Integer limitI) {
-        int offset = offsetI == null ? postOffsetDefault : offsetI;
-        int limit = limitI == null ? postLimitDefault : limitI;
+    public List<PostDto> getPostFeed(String userId, int offset, int limit) {
         List<PostFeed> cachedPosts = postCacheService.getPosts(userId, offset, limit);
         int cacheSize = postCacheService.getCacheSize(userId);
         int cashSizeDefault = postCacheService.getPostCashSizeDefault();

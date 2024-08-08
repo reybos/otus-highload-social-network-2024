@@ -14,6 +14,6 @@ public interface PostService {
 
     void updatePost(String userId, String postId, PostDto postDto);
 
-    List<PostDto> getPostFeed(String userId, Integer offset, Integer limit);
+    List<PostDto> getPostFeed(String userId, int offset, int limit);
 
 }

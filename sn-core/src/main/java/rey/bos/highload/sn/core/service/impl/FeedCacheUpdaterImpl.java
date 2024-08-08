@@ -9,10 +9,14 @@ import rey.bos.highload.sn.core.service.FeedCacheUpdater;
 import rey.bos.highload.sn.core.service.PostCacheService;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
 public class FeedCacheUpdaterImpl implements FeedCacheUpdater {
+
+    private final ConcurrentHashMap<String, ReentrantLock> locks = new ConcurrentHashMap<>();
 
     private final FriendRepository friendRepository;
     private final PostCacheService postCacheService;
@@ -30,10 +34,17 @@ public class FeedCacheUpdaterImpl implements FeedCacheUpdater {
     }
 
     private void updateUserCache(String userId) {
-        List<PostFeed> feeds = postRepository.findLatestPostsByUserId(
-            userId, 0, postCacheService.getPostCashSizeDefault()
-        );
-        postCacheService.updateCache(userId, feeds);
+        ReentrantLock lock = locks.computeIfAbsent(userId, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            List<PostFeed> feeds = postRepository.findLatestPostsByUserId(
+                userId, 0, postCacheService.getPostCashSizeDefault()
+            );
+            postCacheService.updateCache(userId, feeds);
+        } finally {
+            lock.unlock();
+            locks.remove(userId, lock);
+        }
     }
 
 }
