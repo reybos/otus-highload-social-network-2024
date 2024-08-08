@@ -68,17 +68,15 @@ class PostServiceTest extends TestClass {
     }
 
     @Test
-    public void whenGetFeedFromDbThenSuccess() {
+    public void whenGetFeedThenSuccess() {
         UserDto userDto = userFactory.createUser();
         FriendDto friendDto = friendFactory.addFriend(userDto.getUserId());
         PostDto postDto = postFactory.createPost(
             PostFactory.PostParams.builder().userId(friendDto.getFriendUserId()).build()
         );
-        List<PostDto> posts = postService.getPostFeed(userDto.getUserId(), null, null);
+        List<PostDto> posts = postService.getPostFeed(userDto.getUserId(), 0, 10);
         assertThat(posts).hasSize(1);
         assertThat(posts.get(0)).isEqualTo(postDto);
     }
-
-    //TODO check cache work 
 
 }
