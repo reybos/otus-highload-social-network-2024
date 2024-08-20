@@ -35,6 +35,7 @@ public class TestClass {
         rabbitMQContainer = new RabbitMQContainer("rabbitmq:3.10.6-management-alpine")
             .withStartupTimeout(Duration.of(100, SECONDS));
         rabbitMQContainer.start();
+        postgreSQLContainer.start();
     }
 
     @DynamicPropertySource
@@ -44,6 +45,13 @@ public class TestClass {
 
         registry.add("spring.rabbitmq.host",() -> rabbitMQContainer.getHost());
         registry.add("spring.rabbitmq.port",() -> rabbitMQContainer.getAmqpPort());
+
+        registry.add("spring.datasource.master.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.master.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.master.password", postgreSQLContainer::getPassword);
+        registry.add("spring.datasource.replica.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.replica.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.replica.password", postgreSQLContainer::getPassword);
     }
 
 }

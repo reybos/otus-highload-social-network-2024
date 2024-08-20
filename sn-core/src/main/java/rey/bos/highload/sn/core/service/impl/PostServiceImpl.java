@@ -38,12 +38,6 @@ public class PostServiceImpl implements PostService {
     @Value("${post.id.length}")
     private int postIdLength;
 
-    @Value("${post.offset}")
-    private int postOffsetDefault;
-
-    @Value("${post.limit}")
-    private int postLimitDefault;
-
     @Override
     @Retryable(retryFor = DataIntegrityViolationException.class)
     public PostDto createPost(String userId, PostDto postDto) {
