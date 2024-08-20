@@ -1,25 +1,6 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  postgres:
-    container_name: postgres_container
-    image: postgres:14.8-alpine3.18
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: "social_network"
-      POSTGRES_USER: "reybos"
-      POSTGRES_PASSWORD: "0000"
-  redis:
-    container_name: redis_container
-    image: "redis"
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    ports:
-      - '6379:6379'
-    volumes:
-      - redis_data:/data
   social_network_service:
     build:
       context: .
@@ -29,11 +10,98 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      - haproxy
       - redis
+      - rabbitmq
     environment:
-      POSTGRES_HOSTNAME: postgres
       REDIS_HOSTNAME: redis
+      POSTGRES_HOSTNAME: haproxy
+      RABBITMQ_HOSTNAME: rabbitmq
+
+  redis:
+    container_name: redis_container
+    image: "redis"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+
+  rabbitmq:
+    container_name: rabbitmq_container
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  haproxy:
+    build: 'haproxy'
+    ports:
+      - "5432:5432"
+      - "5433:5433"
+      - "7001:7001"
+    depends_on:
+      - zoo1
+      - pg-master
+      - pg-slave
+      - pg-slave2
+    command: >
+      sh -c "wait-for-it.sh -t 600 pg-master:5432 -- 
+      wait-for-it.sh -t 600 pg-slave:5432 -- 
+      wait-for-it.sh -t 600 pg-slave2:5432 -- 
+      haproxy -f /usr/local/etc/haproxy/haproxy.cfg"
+
+  zoo1:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zoo
+    restart: always
+    hostname: zoo1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  pg-master:
+    build: 'postgres'
+    container_name: pg-master
+    restart: always
+    hostname: pg-master
+    expose:
+      - 5432
+      - 8008
+    ports:
+      - "5434:5432"
+    command: patroni /postgres0.yml
+
+  pg-slave:
+    build: 'postgres'
+    container_name: pg-slave
+    restart: always
+    hostname: pg-slave
+    expose:
+      - 5432
+      - 8008
+    ports:
+      - "5435:5432"
+    depends_on:
+      - pg-master
+    command: ["wait-for-it.sh", "pg-master:5432", "--", "patroni", "/postgres1.yml"]
+
+  pg-slave2:
+    build: 'postgres'
+    container_name: pg-slave2
+    restart: always
+    hostname: pg-slave2
+    expose:
+      - 5432
+      - 8008
+    ports:
+      - "5436:5432"
+    depends_on:
+      - pg-master
+    command: ["sh", "-c", "wait-for-it.sh pg-master:5432 -- patroni /postgres2.yml"]
 
 volumes:
   redis_data:
