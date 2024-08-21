@@ -34,13 +34,19 @@ public class PostCacheServiceImpl implements PostCacheService {
     }
 
     @Override
+    /*
+      The method will return posts if
+      - there are more entries in the cache than requested
+      - there are fewer entries in the cache than requested, but since the cache is not fully filled, there will also be fewer in the database
+      If an empty list is returned, then you need to go to the database
+     */
     public List<PostFeed> getPosts(String userId, int offset, int limit) {
         String key = CACHE_PREFIX + userId;
         int cacheSize = getCacheSize(userId);
         if (offset >= cacheSize || cacheSize == 0) {
             return new ArrayList<>();
         }
-        if (offset + limit > cacheSize && cacheSize != getPostCashSizeDefault()) {
+        if (offset + limit > cacheSize && cacheSize < getPostCashSizeDefault()) {
             limit = cacheSize;
         }
         List<PostFeed> postList = redisTemplate.opsForList().range(key, offset, offset + limit - 1);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import rey.bos.highload.sn.core.exception.PostNotFoundException;
 import rey.bos.highload.sn.core.io.entity.Post;
 import rey.bos.highload.sn.core.io.entity.User;
@@ -82,15 +83,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getPostFeed(String userId, int offset, int limit) {
         List<PostFeed> cachedPosts = postCacheService.getPosts(userId, offset, limit);
-        int cacheSize = postCacheService.getCacheSize(userId);
-        int cashSizeDefault = postCacheService.getPostCashSizeDefault();
 
-        if (cachedPosts.size() < limit && (cacheSize == 0 || cacheSize == cashSizeDefault)) {
-            int remaining = limit - cachedPosts.size();
-            List<PostFeed> dbPosts = postRepository.findLatestPostsByUserId(
-                userId, offset + cachedPosts.size(), remaining
-            );
-            cachedPosts.addAll(dbPosts);
+        if (CollectionUtils.isEmpty(cachedPosts)) {
+            cachedPosts = postRepository.findLatestPostsByUserId(userId, offset, limit);
         }
         return postMapper.map(cachedPosts);
     }
