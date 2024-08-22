@@ -1,4 +1,4 @@
-package rey.bos.highload.sn.core.service;
+package rey.bos.highload.sn.core.cache;
 
 import rey.bos.highload.sn.core.io.repository.model.PostFeed;
 

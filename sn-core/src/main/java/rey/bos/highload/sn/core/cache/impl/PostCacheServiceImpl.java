@@ -1,11 +1,11 @@
-package rey.bos.highload.sn.core.service.impl;
+package rey.bos.highload.sn.core.cache.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import rey.bos.highload.sn.core.io.repository.model.PostFeed;
-import rey.bos.highload.sn.core.service.PostCacheService;
+import rey.bos.highload.sn.core.cache.PostCacheService;
 
 import java.util.ArrayList;
 import java.util.List;

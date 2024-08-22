@@ -1,4 +1,4 @@
-package rey.bos.highload.sn.core.service;
+package rey.bos.highload.sn.core.rabbit;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 

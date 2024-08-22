@@ -1,18 +1,19 @@
-package rey.bos.highload.sn.core.service.impl;
+package rey.bos.highload.sn.core.rabbit.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import rey.bos.highload.sn.core.cache.PostCacheService;
 import rey.bos.highload.sn.core.io.repository.FriendRepository;
 import rey.bos.highload.sn.core.io.repository.PostRepository;
 import rey.bos.highload.sn.core.io.repository.model.PostFeed;
-import rey.bos.highload.sn.core.service.FeedCacheUpdater;
-import rey.bos.highload.sn.core.service.PostCacheService;
+import rey.bos.highload.sn.core.rabbit.FeedCacheUpdater;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class FeedCacheUpdaterImpl implements FeedCacheUpdater {
 
@@ -40,7 +41,9 @@ public class FeedCacheUpdaterImpl implements FeedCacheUpdater {
             List<PostFeed> feeds = postRepository.findLatestPostsByUserId(
                 userId, 0, postCacheService.getPostCashSizeDefault()
             );
-            postCacheService.updateCache(userId, feeds);
+            if (!CollectionUtils.isEmpty(feeds)) {
+                postCacheService.updateCache(userId, feeds);
+            }
         } finally {
             lock.unlock();
             locks.remove(userId, lock);

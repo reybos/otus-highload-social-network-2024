@@ -13,7 +13,7 @@ import rey.bos.highload.sn.core.io.entity.User;
 import rey.bos.highload.sn.core.io.repository.PostRepository;
 import rey.bos.highload.sn.core.io.repository.UserRepository;
 import rey.bos.highload.sn.core.io.repository.model.PostFeed;
-import rey.bos.highload.sn.core.service.PostCacheService;
+import rey.bos.highload.sn.core.cache.PostCacheService;
 import rey.bos.highload.sn.core.service.PostService;
 import rey.bos.highload.sn.core.shared.dto.PostDto;
 import rey.bos.highload.sn.core.shared.mapper.PostMapper;
@@ -51,7 +51,9 @@ public class PostServiceImpl implements PostService {
         post.setUpdatedAt(Instant.now(clock));
         Post storedPost = postRepository.save(post);
         rabbitTemplate.convertAndSend("changePostQueue", user.getUserId());
-        return postMapper.map(storedPost, userId);
+        PostDto storedPostDto = postMapper.map(storedPost, userId);
+        rabbitTemplate.convertAndSend("newPostQueue", storedPostDto);
+        return storedPostDto;
     }
 
     @Override
