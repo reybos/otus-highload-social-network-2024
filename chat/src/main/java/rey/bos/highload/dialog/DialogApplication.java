@@ -1,13 +1,13 @@
-package rey.bos.highload.chat;
+package rey.bos.highload.dialog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChatApplication {
+public class DialogApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChatApplication.class, args);
+		SpringApplication.run(DialogApplication.class, args);
 	}
 
 }

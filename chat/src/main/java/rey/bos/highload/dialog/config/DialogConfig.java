@@ -1,4 +1,4 @@
-package rey.bos.highload.chat.config;
+package rey.bos.highload.dialog.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,5 +9,5 @@ import org.springframework.retry.annotation.EnableRetry;
 @EnableRetry
 @ComponentScan(basePackages = "rey.bos.highload")
 @EnableAutoConfiguration
-public class ChatConfig {
+public class DialogConfig {
 }
