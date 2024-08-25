@@ -5,20 +5,15 @@
     "version": "1.2.0"
   },
   "paths": {
-    "/dialog/{user_id}/send": {
+    "/dialog/{dialog_id}/send": {
       "post": {
         "tags": ["Dialog"],
         "operationId": "sendMessage",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
-            "name": "user_id",
+            "name": "dialog_id",
             "schema": {
-              "$ref": "#/components/schemas/UserId"
+              "$ref": "#/components/schemas/DialogId"
             },
             "required": true,
             "in": "path"
@@ -28,13 +23,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": ["text"],
-                "properties": {
-                  "text": {
-                    "$ref": "#/components/schemas/DialogMessageText"
-                  }
-                }
+                "$ref": "#/components/schemas/NewMessage"
               }
             }
           }
@@ -58,20 +47,15 @@
         }
       }
     },
-    "/dialog/{user_id}/list": {
+    "/dialog/{dialog_id}/list": {
       "get": {
         "tags": ["Dialog"],
-        "operationId": "getChat",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "operationId": "getDialog",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "dialog_id",
             "schema": {
-              "$ref": "#/components/schemas/UserId"
+              "$ref": "#/components/schemas/DialogId"
             },
             "required": true,
             "in": "path"
@@ -79,7 +63,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Диалог между двумя пользователями",
+            "description": "Сообщения из чата",
             "content": {
               "application/json": {
                 "schema": {
@@ -157,19 +141,32 @@
         "type": "string",
         "description": "Идентификатор пользователя"
       },
+      "DialogId": {
+        "type": "string",
+        "description": "Идентификатор диалога"
+      },
       "DialogMessageText": {
         "type": "string",
         "description": "Текст сообщения",
         "example": "Привет, как дела?"
       },
-      "DialogMessage": {
+      "NewMessage": {
         "type": "object",
-        "required": ["from", "to", "text"],
+        "required": ["sender", "text"],
         "properties": {
-          "from": {
+          "sender": {
             "$ref": "#/components/schemas/UserId"
           },
-          "to": {
+          "text": {
+            "$ref": "#/components/schemas/DialogMessageText"
+          }
+        }
+      },
+      "DialogMessage": {
+        "type": "object",
+        "required": ["from", "text"],
+        "properties": {
+          "from": {
             "$ref": "#/components/schemas/UserId"
           },
           "text": {

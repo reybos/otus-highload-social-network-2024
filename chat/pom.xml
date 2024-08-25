@@ -11,17 +11,17 @@
 	</parent>
 
 	<groupId>rey.bos.highload</groupId>
-	<artifactId>chat</artifactId>
+	<artifactId>dialog</artifactId>
 	<version>0.1</version>
-	<name>chat</name>
-	<description>chat</description>
+	<name>dialog</name>
+	<description>dialog</description>
 	<packaging>jar</packaging>
 
 	<properties>
 		<java.version>17</java.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<project.package>rey.bos.highload.chat</project.package>
+		<project.package>rey.bos.highload.dialog</project.package>
 		<springdoc.version>1.6.15</springdoc.version>
 	</properties>
 
@@ -161,12 +161,12 @@
 				<version>7.4.0</version>
 				<executions>
 					<execution>
-						<id>chat-server</id>
+						<id>dialog-server</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<output>${project.build.directory}/generated-sources/chat</output>
+							<output>${project.build.directory}/generated-sources/dialog</output>
 							<inputSpec>${project.basedir}/src/main/resources/openapi.json</inputSpec>
 							<apiPackage>${project.package}.api</apiPackage>
 							<modelPackage>${project.package}.model</modelPackage>

@@ -30,7 +30,7 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-0000}"
       PGUSER: "${POSTGRES_USER:-reybos}"
       PGPASSWORD: "${POSTGRES_PASSWORD:-0000}"
-      POSTGRES_DB: "chat"
+      POSTGRES_DB: "dialog"
       POSTGRES_HOST_AUTH_METHOD: "${POSTGRES_HOST_AUTH_METHOD:-trust}"
     networks:
       - chat_network
