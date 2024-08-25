@@ -1,7 +1,5 @@
 # Main backend
 
-## Technologies
-
 ## How to use
 
 1. Installation and launch (All commands are executed from the project directory)
