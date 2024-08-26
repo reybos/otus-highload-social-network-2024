@@ -1,8 +1,11 @@
 package rey.bos.highload.dialog;
 
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
 
-@SpringBootTest
-class DialogApplicationTests {
+class DialogApplicationTests extends TestClass {
+
+	@Test
+	void contextLoads() {
+	}
 
 }
