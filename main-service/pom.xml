@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>rey.bos.highload</groupId>
-    <artifactId>otus-highload-social-network-2024</artifactId>
+    <artifactId>main-service</artifactId>
     <version>0.1</version>
     <name>highload-social-network</name>
     <packaging>pom</packaging>
