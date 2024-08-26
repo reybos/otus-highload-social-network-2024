@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>rey.bos.highload</groupId>
-	<artifactId>dialog</artifactId>
+	<artifactId>dialog-service</artifactId>
 	<version>0.1</version>
 	<name>dialog</name>
 	<description>dialog</description>
