@@ -1,10 +1,11 @@
-package rey.bos.highload.sn.core.io.repository.custom;
+package rey.bos.highload.sn.core.io.repository.custom.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import rey.bos.highload.sn.core.exception.UserNotFoundException;
 import rey.bos.highload.sn.core.io.entity.User;
 import rey.bos.highload.sn.core.io.repository.UserRepository;
+import rey.bos.highload.sn.core.io.repository.custom.UserRepositoryCustom;
 
 import java.util.Optional;
 
