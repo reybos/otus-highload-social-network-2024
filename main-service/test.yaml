@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: Simple CRUD API
+  description: A simple API for performing CRUD operations on items
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://dev-api.example.com/v1
+    description: Development server
+
+paths:
+  /items:
+    get:
+      summary: List all items
+      description: Returns a list of all items
+      operationId: getItems
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: A JSON array of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        '400':
+          description: Bad request
+
+    post:
+      summary: Create a new item
+      description: Adds a new item to the collection
+      operationId: createItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewItem'
+      responses:
+        '201':
+          description: Item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Invalid input
+
+  /items/{itemId}:
+    parameters:
+      - name: itemId
+        in: path
+        required: true
+        description: ID of the item
+        schema:
+          type: string
+
+    get:
+      summary: Get an item by ID
+      description: Returns a single item by ID
+      operationId: getItemById
+      responses:
+        '200':
+          description: Item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+
+    put:
+      summary: Update an item
+      description: Updates an existing item
+      operationId: updateItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewItem'
+      responses:
+        '200':
+          description: Item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Invalid input
+        '404':
+          description: Item not found
+
+    delete:
+      summary: Delete an item
+      description: Deletes an item by ID
+      operationId: deleteItem
+      responses:
+        '204':
+          description: Item deleted successfully
+        '404':
+          description: Item not found
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        name:
+          type: string
+          example: "Widget"
+        description:
+          type: string
+          example: "A simple widget"
+        price:
+          type: number
+          format: float
+          example: 10.99
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - price
+
+    NewItem:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Widget"
+        description:
+          type: string
+          example: "A simple widget"
+        price:
+          type: number
+          format: float
+          example: 10.99
+      required:
+        - name
+        - price
